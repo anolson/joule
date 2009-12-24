@@ -1,0 +1,5 @@
+require 'joule/data_point'
+require 'joule/marker'
+require 'joule/marker_calculator'
+require 'joule/tcx_parser'
+require 'joule/tcx_properties'

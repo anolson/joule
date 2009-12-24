@@ -1,0 +1,5 @@
+= Joule
+
+== Description
+
+Joule is a  Ruby library for parsing bicycle powermeter data.
