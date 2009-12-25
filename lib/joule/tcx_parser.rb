@@ -13,7 +13,7 @@ module Joule
       @xml = xml
       @data_points = Array.new
       @properties = TcxProperties.new
-      @laps = Array.new
+      @markers = Array.new
     end
 
     def parse
@@ -27,7 +27,7 @@ module Joule
       # @data_points.each do |data_point| 
       #       puts "Time : #{Time.at(data_point.time).utc.strftime("%k:%M:%S")}  -- #{Time.at(data_point.time_with_pauses).utc.strftime("%k:%M:%S")}  -- #{data_point.power}" 
       #     end
-      puts "Record count: #{@data_points.count-1}"
+      # puts "Record count: #{@data_points.count-1}"
     end
 
     private
@@ -48,7 +48,7 @@ module Joule
         marker = Marker.new
         marker.start_time = DateTime.parse(lap_node.attribute("StartTime").content)
 
-        if(@laps.size == 0)
+        if(@markers.size == 0)
           @properties.start_date_time = marker.start_time
         end
         
@@ -69,20 +69,22 @@ module Joule
           parse_track(child) if(child.name == "Track")
         end
         marker.end = @data_points.last.time
-        @laps << marker
+        @markers << marker
       end
 
       def parse_track(track)
         @trackpoint_count = 0
         track.children.each do |trackpoint|
           parse_trackpoint(trackpoint) if(trackpoint.name == "Trackpoint")
-          @trackpoint_count = @trackpoint_count + 1
+          
           @record_count = @record_count + 1  
         end
+        @trackpoint_count = @trackpoint_count + 1
       end
 
       def parse_trackpoint(trackpoint)
         data_point = DataPoint.new
+        
         trackpoint.children.each do |data|
           parse_times(data, data_point) if(data.name == "Time")
           data_point.altitude = data.content if data.name == "AltitudeMeters"
@@ -147,8 +149,8 @@ module Joule
 
 
       def calculate_marker_values
-        if(@laps.size > 1)
-          @laps << Marker.new(:start => 0, :end => @data_points.size - 1)
+        if(@markers.size > 1)
+          @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
 
         end
 
@@ -183,29 +185,5 @@ module Joule
         @data_points[1..30].each_slice(2) do |s| times <<  s[1].time_of_day.sec - s[0].time_of_day.sec end
         @properties.record_interval = times.average.round
       end
-  end
-end
-
-
-class Array
-  def sum
-   inject{|sum, value| sum + value}
-  end
-
-  def maximum
-    inject {|max, value| value>max ? value : max}
-  end
-
-  def average
-    sum/length
-  end
-
-  def average_maximum(size)
-    mean_max = {:start => 0.0, :value=> 0.0}
-      each_index do |i|
-        mean = slice(i, size).average
-        mean > mean_max[:value] &&  mean_max = {:start => i, :value => mean}
-      end
-    mean_max
   end
 end

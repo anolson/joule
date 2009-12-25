@@ -1,3 +1,4 @@
+require 'joule/array'
 require 'joule/data_point'
 require 'joule/marker'
 require 'joule/marker_calculator'
