@@ -6,6 +6,8 @@ require 'nokogiri'
 module Joule
 
   class TcxParser
+    include MarkerCalculator
+    # include PeakPowerCalculator
 
     attr_reader :data_points, :markers, :properties
 
@@ -21,13 +23,7 @@ module Joule
       @record_count = 0
       parse_activity("Biking")
       calculate_marker_values()
-      #calculate_record_interval()
-      #calculate_data_point_times()
-      #parse_markers()
-      # @data_points.each do |data_point| 
-      #       puts "Time : #{Time.at(data_point.time).utc.strftime("%k:%M:%S")}  -- #{Time.at(data_point.time_with_pauses).utc.strftime("%k:%M:%S")}  -- #{data_point.power}" 
-      #     end
-      # puts "Record count: #{@data_points.count-1}"
+      # calculate_peak_power_values(@markers.first.duration_seconds)
     end
 
     private
@@ -87,14 +83,13 @@ module Joule
         
         trackpoint.children.each do |data|
           parse_times(data, data_point) if(data.name == "Time")
-          data_point.altitude = data.content if data.name == "AltitudeMeters"
-          data_point.distance = trackpoint.content if data.name == "DistanceMeters"
-          data_point.cadence = trackpoint.content if data.name == "Cadence"
+          data_point.altitude = data.content.to_f if data.name == "AltitudeMeters"
+          data_point.distance = (data.content.to_f * 1000) if data.name == "DistanceMeters"
+          data_point.cadence = data.content.to_i if data.name == "Cadence"
           parse_heartrate(data, data_point) if data.name == "HeartRateBpm"
           parse_extensions(data, data_point) if data.name == "Extensions"
           parse_position(data, data_point) if data.name == "Position" 
         end
-
         @data_points << data_point
       end
 
@@ -133,57 +128,28 @@ module Joule
         end
       end
 
-      # def parse_markers
-      #   @laps.each do |lap|
-      #     count=0
-      #     @data_points.each do |data_point|
-      #       if(lap.start_time < data_point.time_of_day)
-      #         puts "Finding Marker Start: #{count-1} -- #{(count-1) + lap.duration_seconds.to_i} -- #{lap.duration_seconds.to_i/60}"
-      #         break
-      #       end
-      #       count = count + 1
-      #     end
-      #   end
-      #   
-      # end
-
-
       def calculate_marker_values
         if(@markers.size > 1)
+          puts "Creating Workout Marker."
           @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
 
         end
 
-        # @laps.each_with_index { |marker, i|
-        #   calculate_marker_averages marker      
-        #   calculate_marker_maximums marker
-        #   calculate_marker_training_metrics marker
-        # 
-        #   if i.eql?(0)
-        #     marker.distance = @data_values.last.distance
-        #     marker.
-        #   else
-        #     marker.distance = @data_values[marker.end + 1].distance - @data_values[marker.start].distance
-        #   end
-        # 
-        #   marker.energy = (marker.avg_power.round * marker.duration_seconds)/1000
-        # 
-        # }
-      end
-
-
-      def calculate_data_point_times
-        count = 0
-        @data_points.each do |data_point|
-          data_point.time = count * @properties.record_interval
-          count = count + 1
-        end
-      end
-
-      def calculate_record_interval()
-        times = Array.new
-        @data_points[1..30].each_slice(2) do |s| times <<  s[1].time_of_day.sec - s[0].time_of_day.sec end
-        @properties.record_interval = times.average.round
+        @markers.each_with_index { |marker, i|
+          calculate_marker_averages marker      
+          calculate_marker_maximums marker
+          calculate_marker_training_metrics marker
+        
+          if i.eql?(0)
+            marker.distance = @data_points.last.distance
+          else
+            marker.distance = @data_points[marker.end + 1].distance - @data_points[marker.start].distance
+          end
+        
+          marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
+          marker.energy = (marker.avg_power.round * marker.duration_seconds)/1000
+        
+        }
       end
   end
 end

@@ -1,6 +1,8 @@
 class Array
-  def sum
-   inject{|sum, value| sum + value}
+  def summation
+    inject{|sum, value| 
+      #puts "#{sum} -- #{value}"
+      sum + value}
   end
 
   def maximum
@@ -8,7 +10,7 @@ class Array
   end
 
   def average
-    sum/length
+    summation/length
   end
 
   def average_maximum(size)

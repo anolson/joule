@@ -1,4 +1,4 @@
-$:.unshift File.join(File.dirname(__FILE__), 'lib')
+$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 
 require 'rubygems'
 require 'joule'
@@ -20,9 +20,13 @@ module Joule
       assert_equal 3409, data_points.last.time
       assert_equal 3479, data_points.last.time_with_pauses
       assert_equal 66426, data_points.last.time_of_day
-      
       assert_equal 1, tcx_parser.markers.size 
-    
+      assert_equal 150, tcx_parser.markers.first.avg_power
+      assert_equal 66, tcx_parser.markers.first.avg_cadence
+      assert_equal 12.8, sprintf("%.1f", tcx_parser.markers.first.distance * 0.0000006214).to_f
+      assert_equal " 0:56:50", Time.at(tcx_parser.markers.first.duration_seconds).utc.strftime("%k:%M:%S")
+      assert_equal 511, tcx_parser.markers.first.energy
+            
     end
     # 
     # def test_parse_with_power_and_multiple_laps()      
