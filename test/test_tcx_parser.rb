@@ -1,16 +1,10 @@
-$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
-
-require 'rubygems'
-require 'joule'
-
-require 'test/unit'
-
+require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestTcxParser < Test::Unit::TestCase
+  class TestTcxParser < Joule::TestCase
 
     def test_parse_with_power()
-      xml = IO.read(File.expand_path File.join(File.dirname(__FILE__), 'files/2009-11-29-17-29-07.tcx'))
+      xml = IO.read(TCX_FILE_WITH_POWER)
       tcx_parser = TcxParser.new(xml)
       tcx_parser.parse(:calculate_marker_values => true)
       data_points = tcx_parser.data_points
@@ -22,7 +16,7 @@ module Joule
     end
 
     def test_parse_with_calculate_maker_values
-      xml = IO.read(File.expand_path File.join(File.dirname(__FILE__), 'files/2009-11-29-17-29-07.tcx'))
+      xml = IO.read(TCX_FILE_WITH_POWER)
       tcx_parser = TcxParser.new(xml)
       tcx_parser.parse(:calculate_marker_values => true)
       
@@ -35,7 +29,7 @@ module Joule
     end
     
     def test_parse_without_calculate_maker_values
-      xml = IO.read(File.expand_path File.join(File.dirname(__FILE__), 'files/2009-11-29-17-29-07.tcx'))
+      xml = IO.read(TCX_FILE_WITH_POWER)
       tcx_parser = TcxParser.new(xml)
       tcx_parser.parse(:calculate_marker_values => false)
       
@@ -43,7 +37,7 @@ module Joule
     end
     
     def test_parse_without_calculate_peak_power_values
-      xml = IO.read(File.expand_path File.join(File.dirname(__FILE__), 'files/2009-11-29-17-29-07.tcx'))
+      xml = IO.read(TCX_FILE_WITH_POWER)
       tcx_parser = TcxParser.new(xml)
       tcx_parser.parse(:calculate_peak_power_values => false)
       

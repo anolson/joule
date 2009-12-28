@@ -84,8 +84,7 @@ module Joule
         @trackpoint_count = 0
         track.children.each do |trackpoint|
           parse_trackpoint(trackpoint) if(trackpoint.name == "Trackpoint")
-          @trackpoint_count = @trackpoint_count + 1
-          @total_record_count = @total_record_count + 1  
+
         end
         
       end
@@ -103,6 +102,8 @@ module Joule
           parse_position(data, data_point) if data.name == "Position" 
         end
         @data_points << data_point
+        @trackpoint_count = @trackpoint_count + 1
+        @total_record_count = @total_record_count + 1
       end
 
 

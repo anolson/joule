@@ -1,18 +1,11 @@
-$:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
-
-require 'rubygems'
-require 'joule'
-
-require 'test/unit'
-
+require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestTcxParser < Test::Unit::TestCase
+  class TestTcxParser < Joule::TestCase
   
     def setup
       @power_values = Array.new
-      file_name = File.expand_path(File.join(File.dirname(__FILE__), 'files/power_values.txt'))
-      File.open( file_name, 'r') do |io|
+      File.open(RAW_POWER_VALUES_FILENAME, 'r') do |io|
         while(line = io.gets)
           @power_values << line.to_f
         end
