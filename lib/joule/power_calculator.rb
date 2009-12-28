@@ -1,28 +1,36 @@
 module Joule
   class PowerCalculator
-    def PowerCalculator.average(values)
+    def self.average(values)
       values.average
     end
 
-    def PowerCalculator.maximum(values)
+    def self.maximum(values)
       values.maximum
     end
 
-    def PowerCalculator.total(values)
+    def self.total(values)
       values.sum
     end
 
-    def PowerCalculator.peak_power(values, size)
+    def self.peak_power(values, size)
       values.average_maximum size
     end
-
-    def PowerCalculator.training_stress_score(values)
+    
+    def self.training_stress_score(duration_seconds, threshold_power)
+      if(threshold_power > 0)
+        normalized_work = normalized_power * duration_seconds
+        raw_training_stress_score = normalized_work * intensity_factor(threshold_power)
+        (raw_training_stress_score/(threshold_power * 3600)) * 100
+      end
     end
 
-    def PowerCalculator.intesity_factor(values)
+    def self.intensity_factor(normalized_power, threshold_power)
+      if(threshold_power > 0)
+        normalized_power/threshold_power
+      end
     end
-
-    def PowerCalculator.normalized_power(values, record_interval)
+    
+    def self.normalized_power(values, record_interval)
       thirty_second_record_count = 30 / record_interval
       thirty_second_rolling_power = Array.new
       if(values.length > thirty_second_record_count)

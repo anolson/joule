@@ -1,7 +1,6 @@
 class Array
   def summation
     inject{|sum, value| 
-      #puts "#{sum} -- #{value}"
       sum + value}
   end
 

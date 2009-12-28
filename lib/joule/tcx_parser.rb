@@ -1,32 +1,44 @@
 require 'nokogiri'
-#require 'data_point'
-#require 'tcx_properties'
-#require 'lap'
 
 module Joule
-
   class TcxParser
     include MarkerCalculator
-    # include PeakPowerCalculator
+    include PeakPowerCalculator
 
-    attr_reader :data_points, :markers, :properties
+    attr_reader :data_points, :markers, :properties, :peak_powers
 
     def initialize(string_or_io)
       @string_or_io = string_or_io
       @data_points = Array.new
       @properties = TcxProperties.new
       @markers = Array.new
+      @peak_powers = Array.new
     end
 
-    def parse
+    def parse(options = {})
       @properties.record_interval = 1
-      @record_count = 0
+      @total_record_count = 0
       parse_activity("Biking")
-      calculate_marker_values()
-      # calculate_peak_power_values(@markers.first.duration_seconds)
+      create_workout_marker()
+      
+      if(options[:calculate_marker_values])
+        calculate_marker_values()
+      end
+      
+      if(options[:calculate_peak_power_values])
+        calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
+      end
     end
 
     private
+    
+      def create_workout_marker
+        if(@markers.size > 1)
+          @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
+        end
+      end
+      
+      
       def parse_activity(sport)
         document = Nokogiri::XML::Document.parse(@string_or_io)
         document.xpath("//xmlns:Activity[@Sport='#{sport}']").each do |activity|
@@ -72,10 +84,10 @@ module Joule
         @trackpoint_count = 0
         track.children.each do |trackpoint|
           parse_trackpoint(trackpoint) if(trackpoint.name == "Trackpoint")
-          
-          @record_count = @record_count + 1  
+          @trackpoint_count = @trackpoint_count + 1
+          @total_record_count = @total_record_count + 1  
         end
-        @trackpoint_count = @trackpoint_count + 1
+        
       end
 
       def parse_trackpoint(trackpoint)
@@ -97,7 +109,7 @@ module Joule
       def parse_times(data, data_point)
         time_of_day =  DateTime.parse(data.content)
         data_point.time_of_day = (time_of_day.hour * 3600) + (time_of_day.min * 60) + time_of_day.sec
-        data_point.time = @record_count * @properties.record_interval
+        data_point.time = @total_record_count * @properties.record_interval
 
         if(@trackpoint_count == 0)
           track_start_time = data_point.time_of_day
@@ -129,12 +141,6 @@ module Joule
       end
 
       def calculate_marker_values
-        if(@markers.size > 1)
-          puts "Creating Workout Marker."
-          @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
-
-        end
-
         @markers.each_with_index { |marker, i|
           calculate_marker_averages marker      
           calculate_marker_maximums marker
@@ -147,7 +153,7 @@ module Joule
           end
         
           marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
-          marker.energy = (marker.avg_power.round * marker.duration_seconds)/1000
+          marker.energy = (marker.average_power.round * marker.duration_seconds)/1000
         
         }
       end

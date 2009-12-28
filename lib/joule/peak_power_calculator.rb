@@ -1,10 +1,10 @@
 
 module Joule
   module PeakPowerCalculator
-    def calculate_peak_power_values(total_duration)
+    def calculate_peak_power_values(options = {})
       power_values = @data_points.collect{|v| v.power}
-      Joule::PeakPower::DURATIONS.each { |duration|
-        @peak_powers << calculate_peak_power_value(duration, total_duration, power_values)
+      options[:durations].each { |duration|
+        @peak_powers << calculate_peak_power_value(duration, options[:total_duration], power_values)
       }
 
     end
