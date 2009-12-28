@@ -11,8 +11,8 @@ module Joule
 
     attr_reader :data_points, :markers, :properties
 
-    def initialize(xml = "")
-      @xml = xml
+    def initialize(string_or_io)
+      @string_or_io = string_or_io
       @data_points = Array.new
       @properties = TcxProperties.new
       @markers = Array.new
@@ -28,7 +28,7 @@ module Joule
 
     private
       def parse_activity(sport)
-        document = Nokogiri::XML::Document.parse(@xml)
+        document = Nokogiri::XML::Document.parse(@string_or_io)
         document.xpath("//xmlns:Activity[@Sport='#{sport}']").each do |activity|
           @properties.id = activity.at("./xmlns:Id").content
 
