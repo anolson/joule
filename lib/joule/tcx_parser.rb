@@ -13,6 +13,7 @@ module Joule
       @properties = TcxProperties.new
       @markers = Array.new
       @peak_powers = Array.new
+      @has_native_speed = false
     end
 
     def parse(options = {})
@@ -28,6 +29,9 @@ module Joule
       if(options[:calculate_peak_power_values])
         calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
       end
+      
+      
+      
     end
 
     private
@@ -46,8 +50,10 @@ module Joule
 
           activity.children.each do |child|
             parse_lap(child) if child.name == "Lap"
-
           end
+          
+          calculate_speed if(!@has_native_speed)
+  
         end
       end
 
@@ -128,7 +134,7 @@ module Joule
       def parse_extensions(extensions, data_point)
         extensions.children.each do |extension|
           extension.children.each do |tpx|
-            (data_point.speed = tpx.content.to_f) if(tpx.name == "Speed")
+            (data_point.speed = tpx.content.to_f; @has_native_speed = true;) if(tpx.name == "Speed")
             (data_point.power = tpx.content.to_f) if(tpx.name == "Watts")
           end 
         end  
@@ -146,7 +152,7 @@ module Joule
           calculate_marker_averages marker      
           calculate_marker_maximums marker
           calculate_marker_training_metrics marker
-        
+          
           if i.eql?(0)
             marker.distance = @data_points.last.distance
           else
@@ -156,6 +162,17 @@ module Joule
           marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
           marker.energy = (marker.average_power.round * marker.duration_seconds)/1000
         
+        }
+      end
+      
+      def calculate_speed
+        @data_points.each_with_index { |v, i| 
+          if(i == 0)
+            delta = v.distance 
+          else
+            delta = v.distance - @data_points[i-1].distance
+          end
+          v.speed = delta / @properties.record_interval      
         }
       end
   end

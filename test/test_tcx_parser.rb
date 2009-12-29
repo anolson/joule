@@ -25,6 +25,7 @@ module Joule
       assert_equal 150, tcx_parser.markers.first.average_power
       assert_equal 66, tcx_parser.markers.first.average_cadence
       assert_equal 12.8, sprintf("%.1f", millimeters_to_miles(tcx_parser.markers.first.distance)).to_f
+      assert_equal 13.5, sprintf("%.1f", millimeters_per_second_to_miles_per_hour(tcx_parser.markers.first.average_speed)).to_f
       assert_equal " 0:56:50", Time.at(tcx_parser.markers.first.duration_seconds).utc.strftime("%k:%M:%S")
       assert_equal 511, tcx_parser.markers.first.energy
     end
