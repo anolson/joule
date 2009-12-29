@@ -1,6 +1,6 @@
 module Joule
   class DataPoint
-    attr_accessor :altitude, :cadence, :distance, :heartrate, :latitude, :longitude, :power, :speed, :time, :time_of_day, :time_with_pauses   
+    attr_accessor :altitude, :cadence, :distance, :heartrate, :latitude, :longitude, :power, :speed, :time, :time_of_day, :time_with_pauses, :torque 
 
     def initialize()
       @time_of_day = 0
@@ -14,6 +14,7 @@ module Joule
       @latitude = 0.0
       @longitude = 0.0
       @heartrate = 0
+      @torque = 0.0
     end
   end  
 end
