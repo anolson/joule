@@ -41,27 +41,27 @@ module Joule
       records = FasterCSV.parse(@data) 
       records.shift
       @markers << parse_workout_marker(records)
+      
+      current_marker_index = 0
 
       records.each_with_index { |record, index|
-          if(record[MARKER].to_i > records[index-1][MARKER].to_i) 
-
-
-            if(@markers.size.eql?(1))
-              @markers << Marker.new(:start => 0, :comment => "")
-            end  
-            set_previous_marker_end(index - 1)
-            marker = Marker.new(:start => index, :comment => "")
-
-            @markers << marker
-          end
+        if(record[MARKER].to_i > current_marker_index )
+          create_marker(index)
+          current_marker_index = current_marker_index + 1
+        end 
       }
+      
       #set the end of the last marker
       set_previous_marker_end(records.size - 1)  
     end
 
-    # def parse_workout_marker(records)
-    #   Marker.new(:start => 0, :end => records.size - 1, :comment => "")
-    # end
+    def create_marker(start)
+      if(@markers.size.eql?(1))
+        @markers << Marker.new(:start => 0)
+      end  
+      set_previous_marker_end(start - 1)
+      @markers << Marker.new(:start => start)
+    end
 
     def set_previous_marker_end(value)
       if(@markers.size > 1)
