@@ -41,7 +41,7 @@ module Joule
     end
 
     protected
-    def parse_workout_marker(records)
+    def create_workout_marker(records)
       Marker.new(:start => 0, :end => records.size - 1, :comment => "")
     end
 
@@ -58,9 +58,6 @@ module Joule
           marker.distance = @data_points[marker.end].distance - @data_points[marker.start].distance
           marker.duration_seconds = @data_points[marker.end].time - @data_points[marker.start].time
         end
-          
-        puts "Marker duration: #{marker.duration_seconds}"
-
         marker.energy = (marker.average_power.round * marker.duration_seconds)/1000        
       }
     end

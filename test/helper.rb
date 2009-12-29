@@ -7,6 +7,7 @@ require 'test/unit'
 module Joule
   class TestCase < Test::Unit::TestCase
     ASSETS_DIRECTORY = File.expand_path File.join(File.dirname(__FILE__), 'files')
+    IBIKE_FILE = File.join(ASSETS_DIRECTORY, 'ibike.csv')   
     POWER_TAP_FILE = File.join(ASSETS_DIRECTORY, '11202008.csv')    
     RAW_POWER_VALUES_FILE = File.join(ASSETS_DIRECTORY, 'power_values.txt')
     TCX_FILE_WITH_POWER = File.join(ASSETS_DIRECTORY, '2009-11-29-17-29-07.tcx')
