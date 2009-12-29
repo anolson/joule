@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/helper'
 
 module Joule
   class TestTcxParser < Joule::TestCase
+    include UnitsConversion
 
     def test_parse_with_power()
       xml = IO.read(TCX_FILE_WITH_POWER)
@@ -23,7 +24,7 @@ module Joule
       assert_equal 1, tcx_parser.markers.size 
       assert_equal 150, tcx_parser.markers.first.average_power
       assert_equal 66, tcx_parser.markers.first.average_cadence
-      assert_equal 12.8, sprintf("%.1f", tcx_parser.markers.first.distance * 0.0000006214).to_f
+      assert_equal 12.8, sprintf("%.1f", millimeters_to_miles(tcx_parser.markers.first.distance)).to_f
       assert_equal " 0:56:50", Time.at(tcx_parser.markers.first.duration_seconds).utc.strftime("%k:%M:%S")
       assert_equal 511, tcx_parser.markers.first.energy
     end
