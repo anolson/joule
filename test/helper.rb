@@ -10,6 +10,9 @@ module Joule
     IBIKE_FILE = File.join(ASSETS_DIRECTORY, 'ibike.csv')   
     POWER_TAP_FILE = File.join(ASSETS_DIRECTORY, '11202008.csv')    
     RAW_POWER_VALUES_FILE = File.join(ASSETS_DIRECTORY, 'power_values.txt')
+    
+    SRM_FILE = File.join(ASSETS_DIRECTORY, 'A050108A.srm')
+    
     TCX_FILE_WITH_POWER = File.join(ASSETS_DIRECTORY, '2009-11-29-17-29-07.tcx')
     TCX_FILE_WITH_POWER_AND_MULTIPLE_MARKERS = File.join(ASSETS_DIRECTORY, '2009-11-29-17-29-07.tcx')
     TCX_FILE_WITH_SPEED = File.join(ASSETS_DIRECTORY, 'activity_8755231.tcx')
