@@ -11,6 +11,9 @@ module Joule
     
       assert_equal 1812, srm_parser.properties.record_count
       assert_equal 3624, srm_parser.markers.first.duration_seconds
+      
+      assert_equal 3, srm_parser.markers.size
+      
       assert_equal 205.1, srm_parser.markers[0].average_power.round(1)
       assert_equal 280.2, srm_parser.markers[1].average_power.round(1)
       assert_equal 275.9, srm_parser.markers[2].average_power.round(1)

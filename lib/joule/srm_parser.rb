@@ -56,37 +56,33 @@ module Joule
     end
 
     def parse_markers
-      start = HEADER_SIZE
-      count=0
+      marker_offset = HEADER_SIZE
       
-      while count <= @properties.marker_count 
-        str = @data.slice(start + (count * MARKER_SIZE), MARKER_SIZE)
+      (@properties.marker_count + 1).times { |i|
+        str = @data.slice(marker_offset + (i * MARKER_SIZE), MARKER_SIZE)
 
         marker = Marker.new
         marker.comment = str.slice(0, 255).strip
         marker.active = str.slice(255)
         marker.start = str.slice(256,2).unpack('S')[0] - 1
         marker.end = str.slice(258,2).unpack('S')[0] - 1
-        
-        @markers << marker
-        count=count + 1
-      end
+        @markers << marker        
+      }
+      
     end
 
     def parse_blocks
-      count = 0
-      start = HEADER_SIZE + (MARKER_SIZE * (@properties.marker_count + 1 ))
+      block_offset = HEADER_SIZE + (MARKER_SIZE * (@properties.marker_count + 1 ))
+      
       @blocks = Array.new
-      while count < @properties.block_count
-        str=@data.slice(start + (count * BLOCK_SIZE), BLOCK_SIZE)
-        
+      @properties.block_count.times {|i|
+        str=@data.slice(block_offset + (i * BLOCK_SIZE), BLOCK_SIZE)
+
         block = Hash.new
         block[:time] = str.slice(0,4).unpack('I')[0]
         block[:count] = str.slice(4,2).unpack('S')[0].to_i
-
         @blocks << block
-        count = count + 1
-      end
+      }
     end
 
     def parse_data_points()
