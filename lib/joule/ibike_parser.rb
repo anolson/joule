@@ -1,5 +1,5 @@
 module Joule
-  class IBikeParser < CsvParser
+  class IBikeParser < Joule::CSV::Parser
     IBIKE = '.csv'
     SPEED = 0
     WINDSPEED = 1

@@ -1,5 +1,5 @@
 module Joule
-  class PowertapParser < CsvParser
+  class PowertapParser < Joule::CSV::Parser
     MINUTES = 0
     TORQUE = 1
     SPEED = 2

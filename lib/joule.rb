@@ -7,7 +7,7 @@ require 'joule/calculator'
 
 require 'joule/units_conversion'
 
-require 'joule/csv_parser'
+require 'joule/csv'
 require 'joule/ibike_parser'
 require 'joule/ibike_properties'
 require 'joule/powertap_parser'
