@@ -6,7 +6,7 @@ module Joule
         
     def test_parse
       data = IO.read(IBIKE_FILE)
-      ibike_parser = IBikeParser.new(data)      
+      ibike_parser = Joule::IBike::Parser.new(data)      
       ibike_parser.parse(:calculate_marker_values => true)
       
       assert_equal 1, ibike_parser.properties.record_interval
