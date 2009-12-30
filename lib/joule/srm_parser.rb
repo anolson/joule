@@ -2,8 +2,9 @@ require 'kconv'
 
 module Joule
   class SrmParser
-    include MarkerCalculator
-    include PeakPowerCalculator
+    include Joule::Calculator::MarkerCalculator
+    include Joule::Calculator::PeakPowerCalculator
+    
     SRM = '.srm'
     HEADER_SIZE=86
     MARKER_SIZE=270

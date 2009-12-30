@@ -22,7 +22,7 @@ module Joule
       tcx_parser.parse(:calculate_marker_values => true)
       
       assert_equal 1, tcx_parser.markers.size 
-      assert_equal 150, tcx_parser.markers.first.average_power
+      assert_equal 150, tcx_parser.markers.first.average_power.round
       assert_equal 66, tcx_parser.markers.first.average_cadence
       assert_equal 12.8, sprintf("%.1f", millimeters_to_miles(tcx_parser.markers.first.distance)).to_f
       assert_equal 13.5, sprintf("%.1f", millimeters_per_second_to_miles_per_hour(tcx_parser.markers.first.average_speed)).to_f

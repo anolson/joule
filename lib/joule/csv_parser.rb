@@ -2,8 +2,8 @@ require 'fastercsv'
 
 module Joule
   class CsvParser
-    include Joule::MarkerCalculator
-    include Joule::PeakPowerCalculator
+    include Joule::Calculator::MarkerCalculator
+    include Joule::Calculator::PeakPowerCalculator
     include Joule::UnitsConversion
 
     attr_reader :properties, :markers, :data_points, :peak_powers

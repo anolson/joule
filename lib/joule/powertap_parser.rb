@@ -40,7 +40,7 @@ module Joule
     def parse_markers
       records = FasterCSV.parse(@data) 
       records.shift
-      @markers << parse_workout_marker(records)
+      @markers << create_workout_marker(records)
       
       current_marker_index = 0
 

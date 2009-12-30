@@ -3,9 +3,8 @@ require 'joule/float'
 
 require 'joule/data_point'
 require 'joule/marker'
-require 'joule/marker_calculator'
-require 'joule/peak_power_calculator'
-require 'joule/power_calculator'
+require 'joule/calculator'
+
 require 'joule/units_conversion'
 
 require 'joule/csv_parser'
