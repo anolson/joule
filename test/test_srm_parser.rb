@@ -6,7 +6,7 @@ module Joule
         
     def test_parse
       data = IO.read(SRM_FILE)
-      srm_parser = SrmParser.new(data)      
+      srm_parser = Joule::SRM::Parser.new(data)      
       srm_parser.parse(:calculate_marker_values => true)
     
       assert_equal 1812, srm_parser.properties.record_count

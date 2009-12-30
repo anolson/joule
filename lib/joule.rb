@@ -13,8 +13,7 @@ require 'joule/ibike_properties'
 require 'joule/powertap_parser'
 require 'joule/powertap_properties'
 
-require 'joule/srm_parser'
-require 'joule/srm_properties'
+require 'joule/srm'
 
 
 require 'joule/tcx_parser'
