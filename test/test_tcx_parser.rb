@@ -6,7 +6,7 @@ module Joule
 
     def test_parse_with_power()
       xml = IO.read(TCX_FILE_WITH_POWER)
-      tcx_parser = TcxParser.new(xml)
+      tcx_parser = Joule::TCX::Parser.new(xml)
       tcx_parser.parse(:calculate_marker_values => true)
       data_points = tcx_parser.data_points
       
@@ -18,7 +18,7 @@ module Joule
 
     def test_parse_with_calculate_maker_values
       xml = IO.read(TCX_FILE_WITH_POWER)
-      tcx_parser = TcxParser.new(xml)
+      tcx_parser = Joule::TCX::Parser.new(xml)
       tcx_parser.parse(:calculate_marker_values => true)
       
       assert_equal 1, tcx_parser.markers.size 
@@ -32,7 +32,7 @@ module Joule
     
     def test_parse_without_calculate_maker_values
       xml = IO.read(TCX_FILE_WITH_POWER)
-      tcx_parser = TcxParser.new(xml)
+      tcx_parser = Joule::TCX::Parser.new(xml)
       tcx_parser.parse(:calculate_marker_values => false)
       
       assert_equal 0, tcx_parser.markers.first.average_power
@@ -40,7 +40,7 @@ module Joule
     
     def test_parse_without_calculate_peak_power_values
       xml = IO.read(TCX_FILE_WITH_POWER)
-      tcx_parser = TcxParser.new(xml)
+      tcx_parser = Joule::TCX::Parser.new(xml)
       tcx_parser.parse(:calculate_peak_power_values => false)
       
       assert_equal 0, tcx_parser.peak_powers.size

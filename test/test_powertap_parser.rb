@@ -6,7 +6,7 @@ module Joule
         
     def test_parse
       data = IO.read(POWER_TAP_FILE)
-      powertap_parser = PowertapParser.new(data)      
+      powertap_parser = Joule::PowerTap::Parser.new(data)      
       powertap_parser.parse(:calculate_marker_values => true)
       
       assert_equal 6, powertap_parser.markers.size
