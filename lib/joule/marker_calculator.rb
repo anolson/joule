@@ -3,7 +3,7 @@ module Joule
   module MarkerCalculator
     def calculate_marker_averages(marker)
       marker.average_power = Joule::PowerCalculator::average(
-        self.data_points[marker.start..marker.end].collect() {|v| v.power}).round
+        self.data_points[marker.start..marker.end].collect() {|v| v.power})
       
       marker.average_speed = Joule::PowerCalculator::average(
         self.data_points[marker.start..marker.end].collect() {|v| v.speed})

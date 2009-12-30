@@ -26,8 +26,8 @@ class Marker
     @active = true
     @average_cadence = 0
     @average_heartrate = 0
-    @average_power = 0
-    @average_power_to_weight = 0
+    @average_power = 0.0
+    @average_power_to_weight = 0.0
     @average_speed = 0.0
     @comment = ""
     @duration_seconds = 0
@@ -37,7 +37,7 @@ class Marker
     @intensity_factor = 0
     @maximum_cadence = 0
     @maximum_heartrate = 0
-    @maximum_power = 0
+    @maximum_power = 0.0
     @maximum_power_to_weight = 0.0
     @maximum_speed = 0.0
     @normalized_power = 0

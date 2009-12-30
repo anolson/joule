@@ -1,3 +1,5 @@
+require 'kconv'
+
 module Joule
   class SrmParser
     include MarkerCalculator
@@ -11,12 +13,12 @@ module Joule
 
     def initialize(data)
       @data = data  
-      @data_values = Array.new
+      @data_points = Array.new
       @markers = Array.new
       @peak_powers = Array.new
     end
 
-    def parse()
+    def parse(options = {})
       parse_header
       parse_markers
       parse_blocks
@@ -97,16 +99,16 @@ module Joule
         byte1=record.slice(0)
         byte2=record.slice(1)
         byte3=record.slice(2)
-        data_value = DataPoint.new
+        data_point = DataPoint.new
         
         data_point.time = count * @properties.record_interval
-        data_point.power = ( (byte2 & 0x0F) | (byte3 << 4) )
-        data_point[count].speed = ( ( ( (byte2 & 0xF0) << 3) | (byte1 & 0x7F) ) * 32 ) #stored in mm/s
-        data_point[count].cadence = record.slice(3)
-        data_point[count].heartrate = record.slice(4)
+        data_point.power = ( (byte2 & 0x0F) | (byte3 << 4) ).to_f
+        data_point.speed = ( ( ( (byte2 & 0xF0) << 3) | (byte1 & 0x7F) ) * 32 ) #stored in mm/s
+        data_point.cadence = record.slice(3)
+        data_point.heartrate = record.slice(4)
         
-        total_distance = total_distance + (data_point[count].speed * @properties.record_interval) 
-        data_point[count].distance = total_distance #in mm
+        total_distance = total_distance + (data_point.speed * @properties.record_interval) 
+        data_point.distance = total_distance #in mm
         
         @data_points << data_point
         count=count + 1
@@ -117,7 +119,7 @@ module Joule
       count = 0
       @blocks.each { |block|
        relative_count = 0
-        while relative_count < @blocks[block_count][:count]
+        while relative_count < block[:count]
           @data_points[count].time_of_day =  block[:time]/100 + (@properties.record_interval*relative_count)
           @data_points[count].time_with_pauses = block[:time]/100 - @blocks[0][:time]/100 + (@properties.record_interval*(relative_count + 1))
 
@@ -138,7 +140,7 @@ module Joule
         if i.eql?(0)
           marker.distance = @data_points.last.distance
         else
-          marker.distance = @data_points[marker.end + 1].distance - @data_data_points[marker.start].distance
+          marker.distance = @data_points[marker.end + 1].distance - @data_points[marker.start].distance
         end
 
         marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
