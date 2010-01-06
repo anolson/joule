@@ -13,14 +13,10 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = true
 end
 
-
-
-
-
 spec = Gem::Specification.new do |s|
   s.name = "joule"
   s.summary = "A Ruby library for parsing bicycle powermeter data."
-  s.description = ""
+  s.description = "Joule parses and does some basic analyzing of powermeter data. Supported formats include SRM(.srm), Saris PowerTap(.csv), iBike(.csv), and Garmin(.tcx)"
   s.homepage = "http://github.com/anolson/joule"
   
   s.version = "1.0.0"

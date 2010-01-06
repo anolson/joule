@@ -4,12 +4,65 @@
 
 Joule is a  Ruby library for parsing bicycle powermeter data.
 
+The following formats are supported:
+
+*SRM (.srm)
+*PowerTap (.csv)
+*iBike (.csv)
+*Garmin (.tcx)
+
+==Install 
+
+	sudo gem install joule
+
+
+==Usage
+	
+	require 'joule'
+	
+  parser = Joule::SRM::Parser.new(IO.read("sample_srm_file.srm"))      
+  parser.parse(
+		:calculate_marker_values => true, 
+		:calculate_peak_power_values => true, 
+		:durations => [5, 300, 1200])
+
+	# parser.data_points is an Array containing all the DataPoint objects.
+	parser.data_points.each { |v| 
+		puts "--Data Point--"
+		puts "Time: #{v.time}"
+		puts "Power: #{v.power}"
+	}
+	
+	# parser.markers is an Array containing all the Marker objects.  The first 
+	# marker always represents the entire file.
+	parser.markers.each { |v| 
+		puts "--Marker--"
+		puts "Duration: #{v.duration_seconds}"
+		puts "Average Power: #{v.average_power}"
+		puts "Normalized Power: #{v.average_power}"
+	}
+	
+	# parser.peak_powers is an Array of Hash objects representing the peak 
+	# powers for a give duration (5 second, 5 minute, 20   minute, etc).  This 
+	# is also sometimes referred to the mean maximal power.
+	parser.peak_powers.each { |v|
+		puts "--Peak Power--"
+		puts "Duration: #{v.duration}"
+		puts "Peak Power: #{v.value}"	
+	} 
+	
+	
+== Dependencies
+
+* nokogiri
+* fastercsv
+
 
 == License
 
 (The MIT License)
 
-Copyright (c) 2008 - 2009 Andrew Olson
+Copyright (c) 2008 - 2010 Andrew Olson
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ‘Software’), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
