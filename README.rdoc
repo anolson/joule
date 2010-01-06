@@ -12,12 +12,10 @@ The following formats are supported:
 *Garmin (.tcx)
 
 ==Install 
-
 	sudo gem install joule
 
 
 ==Usage
-	
 	require 'joule'
 	
   parser = Joule::SRM::Parser.new(IO.read("sample_srm_file.srm"))      
