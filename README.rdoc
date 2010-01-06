@@ -6,10 +6,10 @@ Joule is a  Ruby library for parsing bicycle powermeter data.
 
 The following formats are supported:
 
-*SRM (.srm)
-*PowerTap (.csv)
-*iBike (.csv)
-*Garmin (.tcx)
+* SRM (.srm)
+* PowerTap (.csv)
+* iBike (.csv)
+* Garmin (.tcx)
 
 ==Install 
   sudo gem install joule
