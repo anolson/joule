@@ -1,9 +1,10 @@
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+$:.unshift File.join(File.dirname(__FILE__), 'lib')
 
 require 'rubygems'
 require 'joule'
 require 'test/unit'
-require 'lib/float'
+require 'float'
 
 module Joule
   class TestCase < Test::Unit::TestCase
