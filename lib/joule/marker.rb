@@ -1,4 +1,6 @@
 class Marker
+  include Joule::Hashable
+  
   attr_accessor :active
   attr_accessor :average_cadence
   attr_accessor :average_heartrate
@@ -32,7 +34,7 @@ class Marker
     @comment = ""
     @duration_seconds = 0
     @distance = 0.0
-    @end = options[:end]
+    options[:end] ? @end = options[:end] : @end = 0
     @energy = 0
     @intensity_factor = 0
     @maximum_cadence = 0
@@ -41,7 +43,7 @@ class Marker
     @maximum_power_to_weight = 0.0
     @maximum_speed = 0.0
     @normalized_power = 0
-    @start = options[:start]
+    options[:start] ? @start = options[:start] : @start = 0 
     @training_stress_score = 0.0
     
   end

@@ -1,5 +1,6 @@
 require 'joule/array'
 require 'joule/float'
+require 'joule/hashable'
 
 require 'joule/data_point'
 require 'joule/marker'
