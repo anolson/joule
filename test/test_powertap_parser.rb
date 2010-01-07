@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestUnitsConverter < Joule::TestCase
+  class TestPowertapParser < Joule::TestCase
     include Joule::UnitsConversion
         
     def test_parse
