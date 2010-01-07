@@ -27,7 +27,7 @@ module Joule
       end
 
       def parse(options = {})
-        parse_header
+        parse_properties
         parse_markers
         parse_data_points
 

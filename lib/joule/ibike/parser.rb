@@ -15,7 +15,7 @@ module Joule
       LONGITUDE = 13
       TIMESTAMP = 14
 
-      def parse_header()
+      def parse_properties()
         records = FasterCSV.parse(@data)
         header = records.shift
 

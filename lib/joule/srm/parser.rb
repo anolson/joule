@@ -21,7 +21,7 @@ module Joule
        end
 
        def parse(options = {})
-         parse_header
+         parse_properties
          parse_markers
          parse_blocks
          parse_data_points
@@ -35,8 +35,9 @@ module Joule
            calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
          end
        end
-
-       def parse_header()
+       
+       private
+       def parse_properties()
          str = @data.slice(0, HEADER_SIZE)
          @properties = Joule::SRM::Properties.new
          @properties.ident=str.slice(0,4)

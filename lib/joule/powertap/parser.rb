@@ -10,7 +10,7 @@ module Joule
       HEARTRATE = 6
       MARKER = 7
 
-      def parse_header()
+      def parse_properties()
         header = FasterCSV.parse(@data).shift
         records = FasterCSV.parse(@data) 
         @properties = Joule::PowerTap::Properties.new
