@@ -91,7 +91,7 @@ module Joule
        def parse_data_points()
          count = 0
          start = HEADER_SIZE + (MARKER_SIZE * (@properties.marker_count + 1 )) + (BLOCK_SIZE * @properties.block_count) + 7
-         total_distance = 0
+         total_distance = 0.0
 
          while count < @properties.record_count
            record=@data.slice(start + (count * 5), 5)
@@ -128,24 +128,6 @@ module Joule
          }
 
          @properties.date_time = data_points.first.time_of_day.to_i
-       end
-
-       def calculate_marker_values
-         @markers.each_with_index { |marker, i|
-           calculate_marker_averages marker      
-           calculate_marker_maximums marker
-           calculate_marker_training_metrics marker
-
-           if i.eql?(0)
-             marker.distance = @data_points.last.distance
-           else
-             marker.distance = @data_points[marker.end + 1].distance - @data_points[marker.start].distance
-           end
-
-           marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
-           marker.energy = (marker.average_power.round * marker.duration_seconds)/1000
-
-         }
        end
 
      end

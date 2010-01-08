@@ -46,23 +46,6 @@ module Joule
         Marker.new(:start => 0, :end => records.size - 1, :comment => "")
       end
 
-      def calculate_marker_values
-        @markers.each_with_index { |marker, i|
-          calculate_marker_averages marker      
-          calculate_marker_maximums marker
-          calculate_marker_training_metrics marker
-
-          if i.eql?(0) 
-            marker.distance = @data_points.last.distance
-            marker.duration_seconds = @data_points.last.time
-          else
-            marker.distance = @data_points[marker.end].distance - @data_points[marker.start].distance
-            marker.duration_seconds = @data_points[marker.end].time - @data_points[marker.start].time
-          end
-          marker.energy = (marker.average_power.round * marker.duration_seconds)/1000        
-        }
-      end
-
     end
   end
 end

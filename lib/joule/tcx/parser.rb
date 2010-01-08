@@ -143,24 +143,6 @@ module Joule
         end
       end
 
-      def calculate_marker_values
-        @markers.each_with_index { |marker, i|
-          calculate_marker_averages marker      
-          calculate_marker_maximums marker
-          calculate_marker_training_metrics marker
-
-          if i.eql?(0)
-            marker.distance = @data_points.last.distance
-          else
-            marker.distance = @data_points[marker.end + 1].distance - @data_points[marker.start].distance
-          end
-
-          marker.duration_seconds = (marker.end - marker.start + 1) * @properties.record_interval
-          marker.energy = (marker.average_power.round * marker.duration_seconds)/1000
-
-        }
-      end
-
       def calculate_speed
         @data_points.each_with_index { |v, i| 
           if(i == 0)

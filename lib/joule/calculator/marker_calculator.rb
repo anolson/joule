@@ -35,6 +35,33 @@ module Joule
           self.data_points[marker.start..marker.end].collect() {|value| value.power}, self.properties.record_interval)
       end
       
+      
+      def calculate_marker_totals(marker, index)
+        if(index == 0)
+          marker.distance = @data_points.last.distance
+          marker.duration_seconds = @data_points.last.time
+        else
+          if(marker.start == 0)
+            marker.distance = @data_points[marker.end].distance - @data_points[marker.start].distance
+            marker.duration_seconds = @data_points[marker.end].time - @data_points[marker.start].time
+          else
+            marker.distance = @data_points[marker.end].distance - @data_points[marker.start - 1].distance
+            marker.duration_seconds = @data_points[marker.end].time - @data_points[marker.start - 1].time
+          end 
+        end
+        
+        marker.energy = (marker.average_power.round * marker.duration_seconds)/1000        
+      end
+      
+      def calculate_marker_values(options = {})
+        @markers.each_with_index { |marker, i|
+          calculate_marker_averages marker      
+          calculate_marker_maximums marker
+          calculate_marker_training_metrics marker
+          calculate_marker_totals marker, i  
+        }
+      end
+      
     end
   end
 end
