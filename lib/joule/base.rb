@@ -1,0 +1,1 @@
+require 'joule/base/parser'

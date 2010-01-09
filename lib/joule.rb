@@ -6,6 +6,7 @@ require 'joule/marker'
 require 'joule/calculator'
 require 'joule/units_conversion'
 
+require 'joule/base'
 require 'joule/csv'
 require 'joule/ibike'
 require 'joule/powertap'

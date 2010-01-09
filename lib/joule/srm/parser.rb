@@ -2,41 +2,19 @@ require 'kconv'
 
 module Joule
   module SRM
-    class Parser
-       include Joule::Calculator::MarkerCalculator
-       include Joule::Calculator::PeakPowerCalculator
-
+    class Parser < Joule::Base::Parser
        SRM = '.srm'
        HEADER_SIZE=86
        MARKER_SIZE=270
        BLOCK_SIZE=6
 
-       attr_reader :properties, :markers, :data_points, :peak_powers
-
-       def initialize(data)
-         @data = data  
-         @data_points = Array.new
-         @markers = Array.new
-         @peak_powers = Array.new
-       end
-
-       def parse(options = {})
-         parse_properties
+       def parse_workout()
          parse_markers
          parse_blocks
          parse_data_points
          parse_data_point_times
-
-         if(options[:calculate_marker_values])
-           calculate_marker_values()
-         end
-
-         if(options[:calculate_peak_power_values])
-           calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
-         end
        end
        
-       private
        def parse_properties()
          str = @data.slice(0, HEADER_SIZE)
          @properties = Joule::SRM::Properties.new
@@ -58,6 +36,7 @@ module Joule
          @properties.record_count = str.slice(4,2).unpack('S')[0]   
        end
 
+       private
        def parse_markers
          marker_offset = HEADER_SIZE
 

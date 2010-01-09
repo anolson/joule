@@ -2,21 +2,14 @@ require 'fastercsv'
 
 module Joule
   module CSV
-    class Parser
-      include Joule::Calculator::MarkerCalculator
-      include Joule::Calculator::PeakPowerCalculator
+    class Parser < Joule::Base::Parser
       include Joule::UnitsConversion
 
-      attr_reader :properties, :markers, :data_points, :peak_powers
-
-
-      def initialize(data)
-        @data = data
-        @markers = Array.new
-        @data_points = Array.new
-        @peak_powers = Array.new
+      def parse_workout()
+        parse_markers
+        parse_data_points
       end
-
+      
       def get_parser
         header = FasterCSV.parse(@data).shift
         if header[0].to_s.downcase.eql?("ibike")
@@ -24,21 +17,6 @@ module Joule
         else
           return PowertapFileParser.new(data)
         end
-      end
-
-      def parse(options = {})
-        parse_properties
-        parse_markers
-        parse_data_points
-
-        if(options[:calculate_marker_values])
-          calculate_marker_values()
-        end
-
-        if(options[:calculate_peak_power_values])
-          calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
-        end
-
       end
 
       protected

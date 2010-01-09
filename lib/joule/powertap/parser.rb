@@ -19,7 +19,8 @@ module Joule
         @properties.distance_units = header[DISTANCE].to_s.downcase
         calculate_record_interval(records)
       end
-
+      
+      private
       def parse_data_points()
         records = FasterCSV.parse(@data) 
         records.shift

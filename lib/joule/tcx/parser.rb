@@ -2,35 +2,17 @@ require 'nokogiri'
 
 module Joule
   module TCX
-    class Parser
-      include Joule::Calculator::MarkerCalculator
-      include Joule::Calculator::PeakPowerCalculator
+    class Parser < Joule::Base::Parser
 
-      attr_reader :data_points, :markers, :properties, :peak_powers
-
-      def initialize(string_or_io)
-        @string_or_io = string_or_io
-        @data_points = Array.new
-        @properties = Joule::TCX::Properties.new
-        @markers = Array.new
-        @peak_powers = Array.new
-        @has_native_speed = false
-      end
-
-      def parse(options = {})
-        @properties.record_interval = 1
+      def parse_workout()
         @total_record_count = 0
         parse_activity("Biking")
         create_workout_marker()
-
-        if(options[:calculate_marker_values])
-          calculate_marker_values()
-        end
-
-        if(options[:calculate_peak_power_values])
-          calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
-        end
-
+      end
+      
+      def parse_properties
+        @properties = Joule::TCX::Properties.new
+        @properties.record_interval = 1
       end
 
       private  
@@ -41,7 +23,7 @@ module Joule
       end
 
       def parse_activity(sport)
-        document = Nokogiri::XML::Document.parse(@string_or_io)
+        document = Nokogiri::XML::Document.parse(@data)
         document.xpath("//xmlns:Activity[@Sport='#{sport}']").each do |activity|
           @properties.id = activity.at("./xmlns:Id").content
 
