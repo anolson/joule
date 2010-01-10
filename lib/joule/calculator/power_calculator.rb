@@ -13,8 +13,12 @@ module Joule
         values.sum
       end
 
-      def self.peak_power(values, size)
-        values.average_maximum size
+      def self.peak_power(array, duration, size)
+        average_maximum = array.average_maximum size
+        peak_power = PeakPower.new(duration)
+        peak_power.start = average_maximum[:start]
+        peak_power.value = average_maximum[:value]
+        peak_power
       end
     
       def self.training_stress_score(duration_seconds, threshold_power)

@@ -4,6 +4,7 @@ require 'joule/hashable'
 require 'joule/data_point'
 require 'joule/marker'
 require 'joule/calculator'
+require 'joule/peak_power'
 require 'joule/units_conversion'
 
 require 'joule/base'

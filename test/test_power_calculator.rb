@@ -23,8 +23,8 @@ module Joule
     end
     
     def test_peak_power
-      peak_power = Joule::Calculator::PowerCalculator.peak_power(@power_values, 1200)
-      assert_equal 170, peak_power[:value].to_i
+      peak_power = Joule::Calculator::PowerCalculator.peak_power(@power_values, 1200, 1200)
+      assert_equal 170, peak_power.value.to_i
     end
     
     def test_training_stress_score

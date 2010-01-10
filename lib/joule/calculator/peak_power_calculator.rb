@@ -3,24 +3,19 @@ module Joule
     module PeakPowerCalculator
       
       def calculate_peak_power_values(options = {})
-        power_values = @data_points.collect{|v| v.power}
+        array = @data_points.collect{|v| v.power}
         options[:durations].each { |duration|
-          @peak_powers << calculate_peak_power_value(duration, options[:total_duration], power_values)
+          @peak_powers << calculate_peak_power_value(array, duration, options[:total_duration])
         }
-
       end
 
-      def calculate_peak_power_value(duration, total_duration, power_values)
+      def calculate_peak_power_value(array, duration, total_duration)
         if duration > total_duration
-          { :duration => duration, 
-            :value => 0,
-            :start => 0 } 
+          PeakPower.new(duration)
         else
-           peak_power = Joule::PowerCalculator::peak_power(power_values, (duration/@properties.record_interval))
-           { :duration => duration, 
-             :value => peak_power[:value],
-             :start => peak_power[:start] }
+          Joule::PowerCalculator::peak_power(array, duration, (duration/@properties.record_interval))
         end
+        
       end
       
     end
