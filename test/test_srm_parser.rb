@@ -8,7 +8,8 @@ module Joule
       data = IO.read(SRM_FILE)
       srm_parser = Joule::SRM::Parser.new(data)      
       srm_parser.parse(:calculate_marker_values => true)
-    
+      
+      puts srm_parser.properties.date_time.class
       # assert_equal 1812, srm_parser.properties.record_count
       # assert_equal 3624, srm_parser.markers.first.duration_seconds
       

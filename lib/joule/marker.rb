@@ -20,7 +20,6 @@ class Marker
   attr_accessor :maximum_speed 
   attr_accessor :normalized_power 
   attr_accessor :start
-  attr_accessor :start_time
   attr_accessor :training_stress_score 
   
   
@@ -45,11 +44,7 @@ class Marker
     @normalized_power = 0
     options[:start] ? @start = options[:start] : @start = 0 
     @training_stress_score = 0.0
-    
   end
   
-  def start_time_in_seconds
-    (@start_time.hour * 3600) + (@start_time.min * 60) + @start_time.sec
-  end
 end
 

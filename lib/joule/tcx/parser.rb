@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'time'
 
 module Joule
   module TCX
@@ -21,11 +22,12 @@ module Joule
           @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
         end
       end
+      
 
       def parse_activity(sport)
         document = Nokogiri::XML::Document.parse(@data)
         document.xpath("//xmlns:Activity[@Sport='#{sport}']").each do |activity|
-          @properties.id = activity.at("./xmlns:Id").content
+          @properties.date_time = Time.parse(activity.at("./xmlns:Id").content)
 
           activity.children.each do |child|
             parse_lap(child) if child.name == "Lap"
@@ -39,12 +41,7 @@ module Joule
       def parse_lap(lap_node)
 
         marker = Marker.new
-        marker.start_time = DateTime.parse(lap_node.attribute("StartTime").content)
-
-        if(@markers.size == 0)
-          @properties.start_date_time = marker.start_time
-        end
-
+                
         if @data_points.size > 0
           marker.start = @data_points.last.time + 1
         else
@@ -53,12 +50,6 @@ module Joule
 
         lap_node.children.each do |child|
           marker.duration_seconds = child.content.to_i if child.name == "TotalTimeSeconds" 
-          # puts "Distance in meters: #{child.content}" if child.name == "DistanceMeters"
-          # puts "Maximum Speed: #{child.content}" if child.name == "MaximumSpeed"
-          # puts "Calories: #{child.content}" if child.name == "Calories"
-          # puts "Intensity: #{child.content}" if child.name == "Intensity"
-          # puts "Cadence: #{child.content}" if child.name == "Cadence"  
-          # puts "Trigger Method: #{child.content}" if child.name == "TriggerMethod"  
           parse_track(child) if(child.name == "Track")
         end
         marker.end = @data_points.last.time
@@ -92,7 +83,7 @@ module Joule
       end
 
       def parse_times(data, data_point)
-        time_of_day =  DateTime.parse(data.content)
+        time_of_day =  Time.parse(data.content)
         data_point.time_of_day = (time_of_day.hour * 3600) + (time_of_day.min * 60) + time_of_day.sec
         data_point.time = @total_record_count * @properties.record_interval
 

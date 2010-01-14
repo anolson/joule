@@ -9,7 +9,9 @@ module Joule
       tcx_parser = Joule::TCX::Parser.new(xml)
       tcx_parser.parse(:calculate_marker_values => true)
       data_points = tcx_parser.data_points
+      # 2009-11-29T17:29:07Z Sun Nov 29 17:29:07 UTC 2009
       
+      assert_equal "11/29/09 17:29:07", tcx_parser.properties.date_time.strftime("%m/%d/%y %H:%M:%S")
       assert_equal 3410, data_points.size 
       assert_equal 3409, data_points.last.time
       assert_equal 3479, data_points.last.time_with_pauses
