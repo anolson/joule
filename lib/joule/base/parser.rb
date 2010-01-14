@@ -11,6 +11,17 @@ module Joule
         @workout = Workout.new
       end
 
+      # Parse powermeter data.
+      # == Options
+      #
+      # * <tt>:calculate_marker_values </tt> - calculate the totals, averages, and maximum values for each Marker.
+      #
+      # * <tt>:calculate_peak_power_values </tt> - calculate the PeakPower values for the Workout.
+      #
+      # * <tt>:durations </tt> - an Array of durations (in seconds) of the PeakPower values that you want to calculate.  Required if :calculate_peak_power_values => true.
+      #
+
+
       def parse(options = {})
 
         parse_properties
