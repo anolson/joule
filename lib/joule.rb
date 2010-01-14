@@ -6,6 +6,7 @@ require 'joule/marker'
 require 'joule/calculator'
 require 'joule/peak_power'
 require 'joule/units_conversion'
+require 'joule/workout'
 
 require 'joule/base'
 require 'joule/csv'

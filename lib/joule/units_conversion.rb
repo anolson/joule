@@ -2,7 +2,7 @@ module Joule
   module UnitsConversion
     def convert_speed(speed)
       #convert to mm/s
-      if self.properties.speed_units_are_english?
+      if @workout.properties.speed_units_are_english?
         miles_per_hour_to_millimeters_per_second speed
       else
         kilometers_per_hour_to_millimeters_per_second speed
@@ -11,7 +11,7 @@ module Joule
 
     def convert_distance(distance)
       #convert distance to mm
-      if self.properties.distance_units_are_english?
+      if @workout.properties.distance_units_are_english?
         miles_to_millimeters distance
       else
         kilometers_to_millimeters distance

@@ -4,13 +4,11 @@ module Joule
       include Joule::Calculator::MarkerCalculator
       include Joule::Calculator::PeakPowerCalculator
       
-      attr_reader :properties, :markers, :data_points, :peak_powers
-
+      attr_accessor :workout
+      
       def initialize(data)
         @data = data  
-        @data_points = Array.new
-        @markers = Array.new
-        @peak_powers = Array.new
+        @workout = Workout.new
       end
 
       def parse(options = {})
@@ -25,7 +23,7 @@ module Joule
         if(options[:calculate_peak_power_values])
           calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
         end
-        
+        @workout
       end
       
       def parse_workout

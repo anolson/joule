@@ -13,10 +13,10 @@ module Joule
       def parse_properties()
         header = FasterCSV.parse(@data).shift
         records = FasterCSV.parse(@data) 
-        @properties = Joule::PowerTap::Properties.new
-        @properties.speed_units = header[SPEED].to_s.downcase
-        @properties.power_units = header[POWER].to_s.downcase
-        @properties.distance_units = header[DISTANCE].to_s.downcase
+        @workout.properties = Joule::PowerTap::Properties.new
+        @workout.properties.speed_units = header[SPEED].to_s.downcase
+        @workout.properties.power_units = header[POWER].to_s.downcase
+        @workout.properties.distance_units = header[DISTANCE].to_s.downcase
         calculate_record_interval(records)
       end
       
@@ -35,14 +35,14 @@ module Joule
           data_point.cadence = record[CADENCE].to_i
           data_point.heartrate = (record[HEARTRATE].to_i < 0) && 0 || record[HEARTRATE].to_i
 
-          @data_points << data_point
+          @workout.data_points << data_point
         }  
       end
 
       def parse_markers
         records = FasterCSV.parse(@data) 
         records.shift
-        @markers << create_workout_marker(records)
+        @workout.markers << create_workout_marker(records)
 
         current_marker_index = 0
 
@@ -58,23 +58,23 @@ module Joule
       end
 
       def create_marker(start)
-        if(@markers.size.eql?(1))
-          @markers << Marker.new(:start => 0)
+        if(@workout.markers.size.eql?(1))
+          @workout.markers << Marker.new(:start => 0)
         end  
         set_previous_marker_end(start - 1)
-        @markers << Marker.new(:start => start)
+        @workout.markers << Marker.new(:start => start)
       end
 
       def set_previous_marker_end(value)
-        if(@markers.size > 1)
-          @markers.last.end = value
+        if(@workout.markers.size > 1)
+          @workout.markers.last.end = value
         end
       end
 
       def calculate_record_interval(records)
         times = Array.new
         records[1..30].each_slice(2) {|s| times << ((s[1][MINUTES].to_f - s[0][MINUTES].to_f)  * 60) }
-        @properties.record_interval = times.average.round
+        @workout.properties.record_interval = times.average.round
       end
 
     end

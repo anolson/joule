@@ -12,14 +12,14 @@ module Joule
       end
       
       def parse_properties
-        @properties = Joule::TCX::Properties.new
-        @properties.record_interval = 1
+        @workout.properties = Joule::TCX::Properties.new
+        @workout.properties.record_interval = 1
       end
 
       private  
       def create_workout_marker
-        if(@markers.size > 1)
-          @markers << Marker.new(:start => 0, :end => @data_points.size - 1)
+        if(@workout.markers.size > 1)
+          @workout.markers << Marker.new(:start => 0, :end => @workout.data_points.size - 1)
         end
       end
       
@@ -27,7 +27,7 @@ module Joule
       def parse_activity(sport)
         document = Nokogiri::XML::Document.parse(@data)
         document.xpath("//xmlns:Activity[@Sport='#{sport}']").each do |activity|
-          @properties.date_time = Time.parse(activity.at("./xmlns:Id").content)
+          @workout.properties.date_time = Time.parse(activity.at("./xmlns:Id").content)
 
           activity.children.each do |child|
             parse_lap(child) if child.name == "Lap"
@@ -42,8 +42,8 @@ module Joule
 
         marker = Marker.new
                 
-        if @data_points.size > 0
-          marker.start = @data_points.last.time + 1
+        if @workout.data_points.size > 0
+          marker.start = @workout.data_points.last.time + 1
         else
           marker.start= 0
         end
@@ -52,8 +52,8 @@ module Joule
           marker.duration_seconds = child.content.to_i if child.name == "TotalTimeSeconds" 
           parse_track(child) if(child.name == "Track")
         end
-        marker.end = @data_points.last.time
-        @markers << marker
+        marker.end = @workout.data_points.last.time
+        @workout.markers << marker
       end
 
       def parse_track(track)
@@ -77,7 +77,7 @@ module Joule
           parse_extensions(data, data_point) if data.name == "Extensions"
           parse_position(data, data_point) if data.name == "Position" 
         end
-        @data_points << data_point
+        @workout.data_points << data_point
         @trackpoint_count = @trackpoint_count + 1
         @total_record_count = @total_record_count + 1
       end
@@ -85,13 +85,13 @@ module Joule
       def parse_times(data, data_point)
         time_of_day =  Time.parse(data.content)
         data_point.time_of_day = (time_of_day.hour * 3600) + (time_of_day.min * 60) + time_of_day.sec
-        data_point.time = @total_record_count * @properties.record_interval
+        data_point.time = @total_record_count * @workout.properties.record_interval
 
         if(@trackpoint_count == 0)
           track_start_time = data_point.time_of_day
-          @track_offset_in_seconds = track_start_time - @properties.start_time_in_seconds
+          @track_offset_in_seconds = track_start_time - @workout.properties.start_time_in_seconds
         end
-        data_point.time_with_pauses = (@trackpoint_count * @properties.record_interval) + @track_offset_in_seconds
+        data_point.time_with_pauses = (@trackpoint_count * @workout.properties.record_interval) + @track_offset_in_seconds
       end
 
       def parse_heartrate(heartrate, data_point)
@@ -117,13 +117,13 @@ module Joule
       end
 
       def calculate_speed
-        @data_points.each_with_index { |v, i| 
+        @workout.data_points.each_with_index { |v, i| 
           if(i == 0)
             delta = v.distance 
           else
-            delta = v.distance - @data_points[i-1].distance
+            delta = v.distance - @workout.data_points[i-1].distance
           end
-          v.speed = delta / @properties.record_interval      
+          v.speed = delta / @workout.properties.record_interval      
         }
       end
     end
