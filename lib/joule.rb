@@ -1,4 +1,5 @@
 require 'joule/array'
+require 'joule/exception'
 require 'joule/hashable'
 
 require 'joule/data_point'
@@ -16,14 +17,18 @@ require 'joule/srm'
 require 'joule/tcx'
 
 module Joule
+  
   def Joule.parser(extension, data) 
     if(extension.eql?(Joule::SRM::FILE_EXTENSION))
       Joule::SRM::Parser.new(data)
     elsif(extension.eql?(Joule::TCX::FILE_EXTENSION))
       Joule::TCX::Parser.new(data)
-    else
+    elsif(extension.eql?(Joule::CSV::FILE_EXTENSION))
       Joule::CSV.parser(extension, data)      
+    else
+      raise UnsupportedFileTypeException
     end
   end
+  
 end
 

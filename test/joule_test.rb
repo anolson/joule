@@ -27,5 +27,11 @@ module Joule
       assert_kind_of Joule::IBike::Parser, parser
     end
     
+    def test_parser_for_invalid_file_type
+      assert_raise UnsupportedFileTypeException do
+        parser = Joule::parser("wko", "")
+      end
+    end
+    
   end
 end

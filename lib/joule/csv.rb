@@ -6,13 +6,11 @@ module Joule
     FILE_EXTENSION = "csv"
     
     def CSV.parser(extension, data)
-      if(extension.eql?(Joule::CSV::FILE_EXTENSION))
-        header = FasterCSV.parse(data).shift
-        if header[0].to_s.downcase.eql?("ibike")
-          Joule::IBike::Parser.new(data)
-        else
-          Joule::PowerTap::Parser.new(data)
-        end
+      header = FasterCSV.parse(data).shift
+      if header[0].to_s.downcase.eql?("ibike")
+        Joule::IBike::Parser.new(data)
+      else
+        Joule::PowerTap::Parser.new(data)
       end
     end
     
