@@ -15,3 +15,15 @@ require 'joule/powertap'
 require 'joule/srm'
 require 'joule/tcx'
 
+module Joule
+  def Joule.parser(extension, data) 
+    if(extension.eql?(Joule::SRM::FILE_EXTENSION))
+      Joule::SRM::Parser.new(data)
+    elsif(extension.eql?(Joule::TCX::FILE_EXTENSION))
+      Joule::TCX::Parser.new(data)
+    else
+      Joule::CSV.parser(extension, data)      
+    end
+  end
+end
+

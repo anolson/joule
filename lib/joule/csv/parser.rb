@@ -1,5 +1,3 @@
-require 'fastercsv'
-
 module Joule
   module CSV
     class Parser < Joule::Base::Parser
@@ -8,15 +6,6 @@ module Joule
       def parse_workout()
         parse_markers
         parse_data_points
-      end
-      
-      def get_parser
-        header = FasterCSV.parse(@data).shift
-        if header[0].to_s.downcase.eql?("ibike")
-          return IbikeFileParser.new(data)
-        else
-          return PowertapFileParser.new(data)
-        end
       end
 
       protected

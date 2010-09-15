@@ -3,7 +3,6 @@ require 'kconv'
 module Joule
   module SRM
     class Parser < Joule::Base::Parser
-       SRM = '.srm'
        HEADER_SIZE=86
        MARKER_SIZE=270
        BLOCK_SIZE=6
