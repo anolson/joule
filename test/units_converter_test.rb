@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestUnitsConverter < Joule::TestCase
+  class UnitsConverterTest < Joule::TestCase
     include Joule::UnitsConversion
         
     def test_miles_per_hour_to_millimeters_per_second

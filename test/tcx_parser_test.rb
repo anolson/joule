@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestTcxParser < Joule::TestCase
+  class TcxParserTest < Joule::TestCase
     include UnitsConversion
 
     def test_parse_with_power()

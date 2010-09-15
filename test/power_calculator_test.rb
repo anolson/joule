@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestTcxParser < Joule::TestCase
+  class PowerCalculatorTest < Joule::TestCase
   
     def setup
       @power_values = Array.new

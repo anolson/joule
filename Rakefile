@@ -10,7 +10,7 @@ desc 'Test Joule.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib' 
   t.libs << 'test/lib' 
-  t.pattern = 'test/**/test_*.rb'
+  t.pattern = 'test/**/*test.rb'
   t.verbose = true
 end
 

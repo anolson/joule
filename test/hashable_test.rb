@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/helper'
 
 module Joule
-  class TestHashable < Joule::TestCase
+  class HashableTest < Joule::TestCase
     include Joule::Hashable
     
     attr_accessor :color
