@@ -7,7 +7,7 @@ module Joule
     def test_parse
       data = IO.read(SRM_FILE)
       srm_parser = Joule::SRM::Parser.new(data)      
-      workout = srm_parser.parse(:calculate_marker_values => true)
+      workout = srm_parser.parse(:calculate_marker_values => true, :calculate_peak_power_values => true, :durations => [5, 60])
       
       puts workout.properties.date_time.class
       # assert_equal 1812, srm_parser.properties.record_count

@@ -32,7 +32,7 @@ module Joule
         end
 
         if(options[:calculate_peak_power_values])
-          calculate_peak_power_values(:durations => options[:durations], :total_duration => @markers.first.duration_seconds)
+          calculate_peak_power_values(:durations => options[:durations], :total_duration => @workout.markers.first.duration_seconds)
         end
         @workout
       end
