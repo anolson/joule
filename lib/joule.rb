@@ -19,11 +19,11 @@ require 'joule/tcx'
 module Joule
   
   def Joule.parser(extension, data) 
-    if(extension.eql?(Joule::SRM::FILE_EXTENSION))
+    if(Joule::SRM::is_srm_file(extension))
       Joule::SRM::Parser.new(data)
-    elsif(extension.eql?(Joule::TCX::FILE_EXTENSION))
+    elsif(Joule::TCX::is_tcx_file(extension))
       Joule::TCX::Parser.new(data)
-    elsif(extension.eql?(Joule::CSV::FILE_EXTENSION))
+    elsif(Joule::CSV::is_csv_file(extension))
       Joule::CSV.parser(extension, data)      
     else
       raise UnsupportedFileTypeException
