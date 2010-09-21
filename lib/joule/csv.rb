@@ -3,7 +3,7 @@ require 'joule/csv/parser'
 
 module Joule
   module CSV
-    FILE_EXTENSION = "csv"
+    FILE_EXTENSION = ".csv"
     
     def CSV.parser(extension, data)
       header = FasterCSV.parse(data).shift

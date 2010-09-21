@@ -3,6 +3,6 @@ require 'joule/tcx/properties'
 
 module Joule
   module TCX
-    FILE_EXTENSION = "tcx"
+    FILE_EXTENSION = ".tcx"
   end
 end
