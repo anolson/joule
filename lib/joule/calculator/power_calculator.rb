@@ -21,10 +21,10 @@ module Joule
         peak_power
       end
     
-      def self.training_stress_score(duration_seconds, threshold_power)
+      def self.training_stress_score(duration_seconds, normalized_power, threshold_power)
         if(threshold_power > 0)
           normalized_work = normalized_power * duration_seconds
-          raw_training_stress_score = normalized_work * intensity_factor(threshold_power)
+          raw_training_stress_score = normalized_work * intensity_factor(normalized_power, threshold_power)
           (raw_training_stress_score/(threshold_power * 3600)) * 100
         end
       end

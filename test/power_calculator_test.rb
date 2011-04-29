@@ -28,15 +28,24 @@ module Joule
     end
     
     def test_training_stress_score
-      assert true
+      tss = Joule::Calculator::PowerCalculator.training_stress_score(@power_values.size, get_normalized_power, 200)
+      assert_equal 65.07, tss.round(2)
     end
     
     def test_intensity_factor
-      assert true
+      assert_equal 0.83, get_intensity_factor.round(2)
     end
     
     def test_normalized_power
-      assert true
+      assert_equal 165.77, get_normalized_power.round(2)
+    end
+    
+    def get_normalized_power
+      Joule::Calculator::PowerCalculator.normalized_power(@power_values, 1)
+    end
+    
+    def get_intensity_factor
+      Joule::Calculator::PowerCalculator.intensity_factor(get_normalized_power, 200)
     end
     
   end
