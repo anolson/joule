@@ -13,7 +13,7 @@ module Joule
         if duration > total_duration
           PeakPower.new(duration)
         else
-          Joule::PowerCalculator::peak_power(array, duration, (duration/@workout.properties.record_interval))
+          Joule::Calculator::PowerCalculator::peak_power(array, duration, (duration/@workout.properties.record_interval))
         end
         
       end
